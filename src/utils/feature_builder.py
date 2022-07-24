@@ -33,7 +33,6 @@ def feature_builder(df, freq, model_name, cyclic_feature_encoding):
         pandas.DataFrame: dataframe of shape (n_samples, n_features)
         
     """
-    # df is dataframe
     df_new = df.copy()
 
     if model_name in ['Linear', 'LGB', 'XGB']:
@@ -75,7 +74,6 @@ def feature_builder(df, freq, model_name, cyclic_feature_encoding):
         for n in range(periods):
             #lag_n ratio
             X_lag_ratio = df_new.shift(periods=n+1) / (df_new.shift(periods=n+2) + 0.01)
-            # X.append(X_lag_1_ratio.values)
             X_temp = []
             #median lag_n ratio in look_back_ratio
             look_back_cycle_temp = look_back_cycle if n != periods - 1 else look_back_cycle - 1
@@ -130,9 +128,6 @@ def feature_builder(df, freq, model_name, cyclic_feature_encoding):
         feature_names.append('weekend_false')
         feature_names.append('weekend_true')
 
-        # # dayofmonth features
-        # X.append(pd.get_dummies(df_new.index.day).values)
-
         X = np.concatenate(X, axis=1)
 
         return X[look_back_cycle*periods:], df_new.iloc[look_back_cycle*periods:].values, feature_names
@@ -159,8 +154,6 @@ def feature_builder(df, freq, model_name, cyclic_feature_encoding):
 
         # weekend feature
         regressors['weekend'] = (df_new.index.dayofweek >= 5).astype(int)
-
-        # # dayofmonth features
 
         df_regressors = pd.DataFrame(index=df_new.index, data=regressors)
 

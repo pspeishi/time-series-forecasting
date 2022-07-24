@@ -26,7 +26,7 @@ class LinearModel(BaseEstimator, RegressorMixin):
         if pd.Timedelta(freq) < pd.Timedelta('1d') and pd.Timedelta('1day') % pd.Timedelta(freq) != pd.Timedelta(0):
             raise ValueError(f'{freq} is not daily divisable')
         elif pd.Timedelta(freq) > pd.Timedelta('1d'):
-            raise ValueError(f'{freq} frequency not suppoeted. Only support daily or daily divisable frequency')
+            raise ValueError(f'{freq} frequency not supported. Only support daily or daily divisable frequency')
 
         if cyclic_feature_encoding not in ['sincos', 'onehot']:
             raise ValueError("Supported cyclic_feature_encoding methods are: ['sincos', 'onehot']")

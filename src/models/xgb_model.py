@@ -33,7 +33,7 @@ class XGBModel(xgb.sklearn.XGBModelBase, xgb.sklearn.XGBRegressorBase):
         if pd.Timedelta(freq) < pd.Timedelta('1d') and pd.Timedelta('1day') % pd.Timedelta(freq) != pd.Timedelta(0):
             raise ValueError(f'{freq} is not daily divisable')
         elif pd.Timedelta(freq) > pd.Timedelta('1d'):
-            raise ValueError(f'{freq} frequency not suppoeted. Only support daily or daily divisable frequency')
+            raise ValueError(f'{freq} frequency not supported. Only support daily or daily divisable frequency')
 
         if cyclic_feature_encoding not in ['sincos', 'onehot']:
             raise ValueError("Supported cyclic_feature_encoding methods are: ['sincos', 'onehot']")
@@ -126,7 +126,6 @@ class XGBModel(xgb.sklearn.XGBModelBase, xgb.sklearn.XGBRegressorBase):
             X_feature, _, _ = feature_builder(X_curr, self.freq, self.name, self.cyclic_feature_encoding)
             X_feature = X_feature[[-1]]
             test_matrix = xgb.DMatrix(X_feature)
-            # y_fcst = self.model.predict(test_matrix, iteration_range=(0, self.model.best_iteration + 1))
             y_fcst = self.model.predict(test_matrix, ntree_limit=self.model.best_ntree_limit)
 
             idx_new = pd.date_range(start=X_temp.index[0], end=X_temp.index[-1]+pd.Timedelta(self.freq), freq=self.freq)

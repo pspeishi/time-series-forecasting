@@ -142,11 +142,6 @@ def back_test(model, X, test_size=0.2, stride='1d', retrain_stride=False, retrai
                 else:
                     X_train = pd.concat([X_train.iloc[stride_periods:], X_test.iloc[i:i+stride_periods]])
     else:
-        # if model.name == 'Prophet':
-        #     model.model = Prophet(growth=growth, seasonality_mode=seasonality_mode)
-        # elif model.name == 'Ensemble' and 'Prophet' in model.models.keys():
-        #     model.models['Prophet'].model = Prophet(growth=growth, seasonality_mode=seasonality_mode)
-
         model.fit(X_train)
         for i in range(0, len(X_test), stride_periods):
             if i <= len(X_test) - fcst_periods:

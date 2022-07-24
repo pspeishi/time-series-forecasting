@@ -35,11 +35,8 @@ class BaselineModel(BaseEstimator, RegressorMixin):
         self.method = method
         self.alpha = alpha
 
-        #self.look_back_dur_default = '4w' if pd.Timedelta(self.freq) == pd.Timedelta('1d') else '7d'
         self.look_back_cycle = int(self.look_back_dur[0])
-        #self.look_back_cycle_default = 4 if pd.Timedelta(self.freq) == pd.Timedelta('1d') else 7
         self.cycle_periods = 7 if pd.Timedelta(self.freq) == pd.Timedelta('1d') else int(pd.Timedelta('1d') / pd.Timedelta(self.freq))
-        #self.look_back_periods_default = int(pd.Timedelta(self.look_back_dur_default) / pd.Timedelta(self.freq))
         self.look_back_periods = int(pd.Timedelta(self.look_back_dur) / pd.Timedelta(self.freq))
         self.fcst_periods = int(pd.Timedelta(self.horizon) / pd.Timedelta(self.freq))
         self.name = 'Baseline'
@@ -84,16 +81,7 @@ class BaselineModel(BaseEstimator, RegressorMixin):
         if len(X) < self.look_back_periods:
             raise ValueError(f'At least {self.look_back_dur} needs to be provided for forecasting')
 
-
-        #print(f'look_back_cycle: {self.look_back_cycle}')
-        #print(f'cycle_periods: {self.cycle_periods}')
-        #print(f'look_back_periods: {self.look_back_periods}')
-        #print(f'fcst_periods: {self.fcst_periods}')
-
         X_temp = X.iloc[-self.look_back_periods:].copy()
-        #print("X_temp: ")
-        #print(X_temp)
-
         for i in range(self.fcst_periods):
             start_time = X_temp.index[i]
             end_time = X_temp.index[-1] + pd.Timedelta(self.freq)
